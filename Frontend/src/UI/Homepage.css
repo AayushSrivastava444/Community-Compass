@@ -1,0 +1,29 @@
+.homepage {
+  text-align: center;
+  padding: 2rem 0;
+}
+.homepage p {
+  margin-bottom: 2rem;
+  color: #555;
+}
+.cta-grid {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.cta {
+  flex: 1 1 200px;
+  padding: 1rem 1.5rem;
+  border-radius: 6px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background .2s;
+}
+.cta.lost { background: #e74c3c; }
+.cta.found { background: #2ecc71; }
+.cta.add   { background: #0066cc; }
+.cta.lost:hover { background: #c0392b; }
+.cta.found:hover { background: #27ae60; }
+.cta.add:hover   { background: #0055a5; }
