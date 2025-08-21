@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import './found.css'  // Make sure this is present
-
+import './Found.css'
 export default function Found() {
   const [items, setItems] = useState([])
 
