@@ -22,8 +22,8 @@ export default function AddItem() {
   const uploadToCloudinary = async (file) => {
     const data = new FormData();
     data.append('file', file);
-    data.append('upload_preset', '<your_upload_preset>'); // Replace with your Cloudinary upload preset
-    const res = await fetch(`https://api.cloudinary.com/v1_1/<your_cloud_name>/image/upload`, {
+    data.append('upload_preset', 'Community Compass');
+    const res = await fetch(`https://api.cloudinary.com/v1_1/dwgaxlkt8/image/upload`, {
       method: 'POST',
       body: data,
     });
