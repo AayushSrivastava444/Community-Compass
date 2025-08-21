@@ -13,7 +13,6 @@ export default function AddItem() {
   const [err, setErr] = useState('');
   const [ok, setOk] = useState('');
 
-  // Snap to top on mount
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });
   }, []);
