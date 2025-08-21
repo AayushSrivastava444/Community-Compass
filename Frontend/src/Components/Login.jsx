@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
-const api = 'http://localhost:5000/api/auth';
+import { API_BASE } from '../lib/api';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -12,7 +11,7 @@ export default function Login() {
     e.preventDefault();
     setErr('');
     try {
-      const res = await axios.post(`${api}/login`, { email, password });
+      const res = await axios.post(`${API_BASE}/api/auth/login`, { email, password });
       if (res.data?.token) localStorage.setItem('token', res.data.token);
       if (res.data?.user) localStorage.setItem('user', JSON.stringify(res.data.user));
       window.location.href = '/account';
@@ -22,53 +21,50 @@ export default function Login() {
   };
 
   return (
-    <>
-      <form
-        onSubmit={handleLogin}
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '100%',
-          maxWidth: '500px',
-          padding: '3rem 2.5rem',
-          backgroundColor: '#f5f5f5',
-          borderRadius: '15px',
-          boxShadow: '0 0 20px rgba(0,0,0,0.1)',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '1.2rem',
-        }}
-      >
-        <h2 style={{ textAlign: 'center', marginBottom: '0.5rem' }}>Login</h2>
-        {err && <p style={{ color: 'red', textAlign: 'center' }}>{err}</p>}
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          style={{ fontSize: '1.1rem', padding: '0.8rem' }}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          style={{ fontSize: '1.1rem', padding: '0.8rem' }}
-        />
-        <button type="submit" style={{ fontSize: '1.1rem', padding: '0.8rem' }}>
-          Login
-        </button>
-      </form>
+    <form
+      onSubmit={handleLogin}
+      style={{
+        maxWidth: 520,
+        margin: '4rem auto 1rem',
+        padding: '2rem',
+        background: '#f6f6f6',
+        borderRadius: 12,
+        boxShadow: '0 4px 14px rgba(0,0,0,0.08)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '0.9rem'
+      }}
+      autoComplete="off"
+    >
+      <h2 style={{ textAlign: 'center', marginBottom: '0.25rem' }}>Login</h2>
+      {err && <p style={{ color: 'red', textAlign: 'center' }}>{err}</p>}
+      <input
+        type="email"
+        placeholder="Email"
+        autoComplete="username"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+        style={{ padding: '0.8rem', fontSize: '1rem' }}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        autoComplete="current-password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+        style={{ padding: '0.8rem', fontSize: '1rem' }}
+      />
+      <button type="submit" style={{ padding: '0.9rem', fontSize: '1rem', cursor: 'pointer' }}>
+        Login
+      </button>
 
-      <div style={{ position: 'absolute', top: 'calc(50% + 250px)', left: '50%', transform: 'translateX(-50%)', width: '100%', maxWidth: '500px', textAlign: 'center' }}>
-        <a href="/forgot-password" style={{ color: '#5a2a83', textDecoration: 'underline', cursor: 'pointer', fontSize: '1rem' }}>
+      <div style={{ textAlign: 'center', marginTop: '0.5rem' }}>
+        <a href="/forgot-password" style={{ color: '#5a2a83', textDecoration: 'underline' }}>
           Forgot Password?
         </a>
       </div>
-    </>
+    </form>
   );
 }

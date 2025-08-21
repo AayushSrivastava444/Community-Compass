@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import './Found.css'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import './Found.css';
+import { API_BASE } from '../lib/api';
+
 export default function Found() {
-  const [items, setItems] = useState([])
+  const [items, setItems] = useState([]);
 
   useEffect(() => {
     axios
-      .get('http://localhost:5000/api/items')
+      .get(`${API_BASE}/api/items`)
       .then(res => setItems(res.data))
-      .catch(err => console.error(err))
-  }, [])
+      .catch(err => console.error(err));
+  }, []);
 
-  const foundItems = items.filter(item => item.status === 'found')
+  const foundItems = items.filter(item => item.status === 'found');
 
   return (
     <div className="found-container">
@@ -33,25 +35,22 @@ export default function Found() {
       >
         {foundItems.map(item => (
           <div className="card" key={item._id}>
-            <img
-              src={`http://localhost:5000${item.image}`}
-              alt={item.name}
-              className="card-image"
-            />
+            {item.image ? (
+              <img
+                src={`${API_BASE}${item.image}`}
+                alt={item.name}
+                className="card-image"
+              />
+            ) : null}
             <h4>{item.name}</h4>
-            <p>
-              <strong>Description:</strong> {item.description}
-            </p>
-            <p>
-              <strong>Location:</strong> {item.location}
-            </p>
-            <p>
-              <strong>Status:</strong> {item.status}
-            </p>
+            <p><strong>Description:</strong> {item.description}</p>
+            <p><strong>Location:</strong> {item.location}</p>
+            <p><strong>Status:</strong> {item.status}</p>
           </div>
         ))}
       </div>
     </div>
-  )
+  );
 }
+
 

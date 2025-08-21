@@ -1,49 +1,46 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { API_BASE } from '../lib/api';
 
-export default function ViewItems({ filterStatus }) {
-  const [items, setItems] = useState([])
+export default function ViewItems() {
+  const [items, setItems] = useState([]);
+  const [err, setErr] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/items')
-      .then(res => setItems(res.data))
-      .catch(err => console.error(err))
-  }, [])
-
-  const filteredItems = filterStatus
-    ? items.filter(item => item.status === filterStatus)
-    : items
+    const fetchItems = async () => {
+      setErr('');
+      try {
+        const res = await axios.get(`${API_BASE}/api/items/all`);
+        setItems(res.data || []);
+      } catch (x) {
+        setErr(x.response?.data?.message || x.message);
+      }
+    };
+    fetchItems();
+  }, []);
 
   return (
-    <div style={{ maxWidth: 700, margin: 'auto' }}>
-      <h2>{filterStatus ? `${filterStatus.charAt(0).toUpperCase() + filterStatus.slice(1)} Items` : 'All Items'}</h2>
-      {filteredItems.length === 0 && <p>No items found.</p>}
-      {filteredItems.map(item => (
-        <div
-          key={item._id}
-          style={{
-            border: '1px solid #ccc',
-            padding: 16,
-            marginBottom: 16,
-            borderRadius: 6,
-            display: 'flex',
-            gap: 16,
-            alignItems: 'center',
-          }}
-        >
-          <img
-            src={`http://localhost:5000${item.image}`}
-            alt={item.name}
-            style={{ width: 120, height: 120, objectFit: 'cover', borderRadius: 6 }}
-          />
-          <div>
-            <h3>{item.name}</h3>
-            <p><strong>Status:</strong> {item.status}</p>
-            <p><strong>Location:</strong> {item.location}</p>
-            <p><strong>Description:</strong> {item.description}</p>
-          </div>
-        </div>
-      ))}
+    <div style={{ maxWidth: 900, margin: '2rem auto' }}>
+      <h2>Items</h2>
+      {err && <p style={{ color: 'red' }}>{err}</p>}
+      {items.length === 0 ? (
+        <p>No items yet.</p>
+      ) : (
+        <ul style={{ listStyle: 'none', padding: 0 }}>
+          {items.map((it) => (
+            <li key={it._id} style={{ padding: '0.8rem 0', borderBottom: '1px solid #eee' }}>
+              <strong>{it.name}</strong> — {it.status} — {it.location}
+              <div style={{ color: '#666' }}>{it.description}</div>
+              {it.imageUrl && (
+                <div style={{ marginTop: '0.5rem' }}>
+                  <img src={it.imageUrl} alt={it.name} style={{ maxWidth: 240, borderRadius: 6 }} />
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
-  )
+  );
 }
+
