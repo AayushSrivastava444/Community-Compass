@@ -19,21 +19,41 @@ export default function AddItem() {
 
   const handleImageChange = (e) => setImage(e.target.files[0] || null);
 
+  const uploadToCloudinary = async (file) => {
+    const data = new FormData();
+    data.append('file', file);
+    data.append('upload_preset', '<your_upload_preset>'); // Replace with your Cloudinary upload preset
+    const res = await fetch(`https://api.cloudinary.com/v1_1/<your_cloud_name>/image/upload`, {
+      method: 'POST',
+      body: data,
+    });
+    const json = await res.json();
+    return json.secure_url;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErr('');
     setOk('');
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('description', description);
-    formData.append('date', date);
-    formData.append('location', location);
-    formData.append('status', status);
-    if (image) formData.append('image', image);
-
     try {
-      await axios.post(`${API_BASE}/api/items`, formData);
-      setName(''); setDescription(''); setDate(''); setLocation(''); setStatus('lost'); setImage(null);
+      let imageUrl = '';
+      if (image) {
+        imageUrl = await uploadToCloudinary(image);
+      }
+      await axios.post(`${API_BASE}/api/items`, {
+        name,
+        description,
+        date,
+        location,
+        status,
+        imageUrl,
+      });
+      setName('');
+      setDescription('');
+      setDate('');
+      setLocation('');
+      setStatus('lost');
+      setImage(null);
       setOk('Item submitted successfully!');
     } catch (x) {
       setErr(x.response?.data?.message || x.message);
@@ -55,21 +75,18 @@ export default function AddItem() {
           onChange={e => setName(e.target.value)}
           required
         />
-
         <textarea
           placeholder="Description"
           value={description}
           onChange={e => setDescription(e.target.value)}
           required
         />
-
         <input
           type="date"
           value={date}
           onChange={e => setDate(e.target.value)}
           required
         />
-
         <div className="status-group">
           <label>
             <input
@@ -90,7 +107,6 @@ export default function AddItem() {
             /> Found
           </label>
         </div>
-
         <textarea
           className="location-textarea"
           placeholder="Location (e.g. Near Park)"
@@ -98,9 +114,7 @@ export default function AddItem() {
           onChange={e => setLocation(e.target.value)}
           required
         />
-
-        <input type="file" onChange={handleImageChange} />
-
+        <input type="file" accept="image/*" onChange={handleImageChange} />
         <button type="submit">Submit</button>
       </form>
     </div>
