@@ -10,7 +10,6 @@ export default function ViewItems({ filterStatus }) {
       .catch(err => console.error(err))
   }, [])
 
-  // Filter items by status if filterStatus is provided
   const filteredItems = filterStatus
     ? items.filter(item => item.status === filterStatus)
     : items

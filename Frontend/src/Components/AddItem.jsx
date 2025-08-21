@@ -9,8 +9,7 @@ export default function AddItem() {
   const [status, setStatus] = useState('lost')
   const [location, setLocation] = useState('')
   const [image, setImage] = useState(null)
-
-  // Snap to top on mount, no sliding
+  
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' })
   }, [])
@@ -18,23 +17,28 @@ export default function AddItem() {
   const handleImageChange = e => setImage(e.target.files[0])
 
   const handleSubmit = async e => {
-    e.preventDefault()
-    const formData = new FormData()
-    formData.append('name', name)
-    formData.append('description', description)
-    formData.append('date', date)
-    formData.append('location', location)
-    formData.append('status', status)
-    formData.append('image', image)
-
-    try {
-      await axios.post('http://localhost:5000/api/items', formData)
-      setName(''); setDescription(''); setDate(''); setLocation(''); setStatus('lost'); setImage(null)
-      alert('Item submitted successfully!')
-    } catch (err) {
-      console.error(err)
-    }
+  e.preventDefault();
+  const formData = new FormData();
+  formData.append('name', name);
+  formData.append('description', description);
+  formData.append('date', date);
+  formData.append('location', location);
+  formData.append('status', status);
+  if (image) {
+    formData.append('image', image);
   }
+
+  try {
+    await axios.post('http://localhost:5000/api/items', formData);
+    setName(''); setDescription(''); setDate(''); setLocation(''); setStatus('lost'); setImage(null);
+    alert('Item submitted successfully!');
+  } catch (err) {
+    const msg = err.response?.data?.message || err.message;
+    console.error('Submit error:', msg);
+    alert('Error submitting: ' + msg);
+  }
+};
+
 
   return (
     <div className="add-item-container">

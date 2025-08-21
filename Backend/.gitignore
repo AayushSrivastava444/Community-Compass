@@ -1,3 +1,14 @@
+# Node modules
 node_modules/
+Backend/node_modules/
+Frontend/node_modules/
+
+# Uploaded files
+Backend/uploads/
+
+# Env files
 .env
-logs/
+Frontend/.env
+
+# Logs
+*.log
