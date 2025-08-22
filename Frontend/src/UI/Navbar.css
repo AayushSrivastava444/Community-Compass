@@ -96,3 +96,51 @@ body {
   color: #6a1b9a;
 }
 
+/* Hamburger button - hidden on desktop */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+}
+
+/* Responsive styles for screens 768px and below */
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  /* Hide existing nav links by default */
+  .navbar-links {
+    display: none !important;
+    flex-direction: column;
+    position: absolute;
+    top: 60px; /* Adjust based on navbar height */
+    left: 0;
+    width: 100%;
+    background-color: #24292e;
+    padding: 1rem 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    z-index: 1001;
+  }
+
+  /* Show nav links only when active */
+  .navbar-links.active {
+    display: flex !important;
+  }
+
+  /* Stack list items */
+  .navbar-links li {
+    margin: 0.5rem 0;
+    text-align: center;
+  }
+
+  /* Adjust logout button width */
+  .logout-btn {
+    width: 90%;
+    margin: auto;
+  }
+}
+

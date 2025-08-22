@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 
 export default function Navbar() {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = () => {
     try {
@@ -18,8 +19,17 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar-logo">Community Compass</div>
-      <ul className="navbar-links">
-        {token && (
+
+      <button
+        className="hamburger"
+        onClick={() => setMenuOpen(!menuOpen)}
+        aria-label="Toggle menu"
+      >
+        ☰
+      </button>
+
+      <ul className={`navbar-links ${menuOpen ? 'active' : ''}`}>
+        {token ? (
           <>
             <li><Link to="/">Home</Link></li>
             <li><Link to="/lost">Lost</Link></li>
@@ -28,8 +38,7 @@ export default function Navbar() {
             <li><Link to="/account">Account</Link></li>
             <li><button onClick={handleLogout} className="logout-btn">Logout</button></li>
           </>
-        )}
-        {!token && (
+        ) : (
           <>
             <li><Link to="/login">Login</Link></li>
             <li><Link to="/register">Register</Link></li>
@@ -39,3 +48,4 @@ export default function Navbar() {
     </nav>
   );
 }
+
