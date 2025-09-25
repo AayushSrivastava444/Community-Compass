@@ -1,23 +1,23 @@
 # Use the official Node.js image as a base image
 FROM node:20-alpine
 
-# Set the working directory inside the container
-WORKDIR /app
+# Set working directory to Frontend folder in container
+WORKDIR /app/Frontend
 
-# Copy package.json and package-lock.json files
-COPY package*.json ./
+# Copy only Frontend package files first for install caching
+COPY Frontend/package*.json ./
 
-# Install dependencies
+# Install frontend dependencies including @vitejs/plugin-react
 RUN npm install
 
-# Copy the rest of the application code
-COPY . .
+# Copy rest of the frontend app code
+COPY Frontend/ .
 
-# Build the Next.js application
+# Run vite build from frontend folder
 RUN npm run build
 
-# Expose the port the app runs on
+# Expose the port your app listens on (adjust if needed)
 EXPOSE 3000
 
-# Command to start the application
+# Command to start the app (adjust if you have a start script)
 CMD ["npm", "start"]
